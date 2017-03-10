@@ -20,6 +20,15 @@ service: job-service
 provider:
   name: aws
   runtime: nodejs4.3
+  region: us-west-2
+  role: arn:aws:iam::686965568333:role/lambda_callsheet
+  vpc: 
+    securityGroupIds: 
+      - sg-2a88d852
+    subnetIds: 
+      - subnet-7597bb2c
+      - subnet-f2c23e96
+      - subnet-d19687a6
 
 # you can overwrite defaults here
 #  stage: dev
@@ -57,6 +66,8 @@ provider:
 functions:
   hello:
     handler: handler.hello
+  goodbye:
+    handler: handler.goodbye
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
