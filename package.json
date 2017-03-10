@@ -1,0 +1,16 @@
+{
+  "name": "job-service",
+  "version": "1.0.1",
+  "description": "microsvc for jobs using aws RDS, Lambda, and API",
+  "main": "handler.js",
+  "dependencies": {
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
