@@ -38,20 +38,71 @@ module.exports.create = (event, context, callback) => {
     }),
   };
 	
-  Jobs.create({ 
-	  title: 'testing new job', lead: 'Jimbo', 
-	  location: 'Anywhere, CA', startDate: new Date(2017, 2, 22) 
-  }).then(function(job) {
+  Jobs.create(event.body).then(function(job) {
 	  console.log('SMS: calling msg service to send sms');
 	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
 	  console.log(msg);
-	  SMS.sendText(msg, '+13108771151').then(function(data) {
-	  	  console.log('SMS: successful message send called');
-		  callback(null, response);
-	  }).catch(function(err) {
-		  console.log('SMS: error during message send called');
-		  console.error(err);
-		  callback(err);
-	  });
+	  return SMS.sendText(msg, '+13108771151');
+  }).then(function(data) {
+      console.log('SMS: successful message send called');
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('SMS: error during message send called');
+      console.error(err);
+      callback(err);
+  }).finally(function() {
+      Jobs.close();
+  });
+};
+
+module.exports.update = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Goodbye for Now! Your function executed successfully!',
+      input: event,
+    }),
+  };
+	
+  Jobs.update(event.body.id, event.body).then(function(job) {
+	  console.log('SMS: calling msg service to send sms');
+	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
+	  console.log(msg);
+	  return SMS.sendText(msg, '+13108771151');
+  }).then(function(data) {
+      console.log('SMS: successful message send called');
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('SMS: error during message send called');
+      console.error(err);
+      callback(err);
+  }).finally(function() {
+      Jobs.close();
+  });
+};
+
+module.exports.delete = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Goodbye for Now! Your function executed successfully!',
+      input: event,
+    }),
+  };
+	
+  Jobs.delete(event.queryStringParameters.jid).then(function(job) {
+	  console.log('SMS: calling msg service to send sms');
+	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
+	  console.log(msg);
+	  return SMS.sendText(msg, '+13108771151');
+  }).then(function(data) {
+      console.log('SMS: successful message send called');
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('SMS: error during message send called');
+      console.error(err);
+      callback(err);
+  }).finally(function() {
+      Jobs.close();
   });
 };
