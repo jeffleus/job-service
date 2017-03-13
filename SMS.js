@@ -24,5 +24,4 @@ module.exports.sendText = function(message, number) {
 	});
 	//return the promise to client
 	return q;
-
 };
