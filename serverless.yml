@@ -66,22 +66,25 @@ provider:
 functions:
   hello:
     handler: handler.hello
+    timeout: 4
     events:
       - http:
           path: jobs/hello
           method: get
   goodbye:
     handler: handler.goodbye
+    timeout: 2
     events:
       - http:
           path: jobs/goodbye
           method: get
   create:
     handler: handler.create
+    timeout: 3
     events:
       - http:
           path: jobs/create
-          method: get
+          method: post
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
