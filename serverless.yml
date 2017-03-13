@@ -76,6 +76,12 @@ functions:
       - http:
           path: jobs/goodbye
           method: get
+  create:
+    handler: handler.create
+    events:
+      - http:
+          path: jobs/create
+          method: get
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
