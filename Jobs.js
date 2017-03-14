@@ -19,21 +19,24 @@ var Job = sequelize.define('job', {
 });
 
 module.exports.get = function(id) {
-    console.log('JOBS: get command called for jid - ' + id);
-	return sequelize.sync().then(function() {
-		console.info('JOB: get single job');
-		return Job.findById(id).then(function(job) {
-			console.info('job found');
-			return job.dataValues;
-		});
-	}).finally(function() {
-		//sequelize.close();
-	});
-};
+    if (!id) return _getAll();
+    console.log('calling get with id: ' + id);
+    return sequelize.sync().then(function() {
+        return Job.findById(id).then(function(job) {
+            console.info('job found');
+            return {
+                count: 1,
+                jobs: [ job.dataValues ]
+            };
+        })
+    }).finally(function() {
+        //sequelize.close();
+    });
+}
 
-module.exports.getAll = function(id) {
+function _getAll() {
+    console.log('calling getAll');
 	return sequelize.sync().then(function() {
-		console.info('JOB: get all jobs');
 		return Job.findAndCountAll().then(function(result) {
 			var jobs = [];
 			result.rows.forEach(function(jobRow) {
@@ -47,7 +50,7 @@ module.exports.getAll = function(id) {
 			//sequelize.close();
 		});
 	});
-};
+}
 
 module.exports.create = function(json) {
 	return sequelize.sync().then(function() {
