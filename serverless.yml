@@ -85,6 +85,17 @@ functions:
       - http:
           path: jobs/create
           method: post
+  get:
+    handler: handler.get
+    timeout: 3
+    events:
+      - http:
+          method: get
+          path: jobs/{jid}
+		  request:
+		    parameters:
+			  paths:
+			    jid: true
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

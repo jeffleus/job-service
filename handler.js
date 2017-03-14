@@ -29,6 +29,32 @@ module.exports.goodbye = (event, context, callback) => {
   callback(null, response);
 };
 
+module.exports.get = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Goodbye for Now! Your function executed successfully!',
+      input: event,
+    }),
+  };
+	
+  Jobs.get(event.queryStringParameters.jid).then(function(job) {
+      console.log('Jobs: successful get called for job - ' + event.queryStringParameters.jid);
+	  response.body = JSON.stringify({
+		  message: job,
+		  input: event,
+		  job: job
+	  });
+      callback(null, response);
+  }).catch(function(err) {
+      console.log('Jobs: error during get call for job - ' + event.queryStringParameters.jid);
+      console.error(err);
+      callback(err);
+  }).finally(function() {
+      Jobs.close();
+  });
+};
+
 module.exports.create = (event, context, callback) => {
   const response = {
     statusCode: 200,
@@ -38,7 +64,7 @@ module.exports.create = (event, context, callback) => {
     }),
   };
 	
-  Jobs.create(event.body).then(function(job) {
+  Jobs.create(event).then(function(job) {
 	  console.log('SMS: calling msg service to send sms');
 	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
 	  console.log(msg);
@@ -64,7 +90,7 @@ module.exports.update = (event, context, callback) => {
     }),
   };
 	
-  Jobs.update(event.body.id, event.body).then(function(job) {
+  Jobs.update(event.id, event).then(function(job) {
 	  console.log('SMS: calling msg service to send sms');
 	  var msg = 'VISION: Job created w/ id: ' + job.id + ' and title: ' + job.title;
 	  console.log(msg);
