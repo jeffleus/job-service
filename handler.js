@@ -38,18 +38,19 @@ module.exports.get = (event, context, callback) => {
       input: event,
     }),
   };
-  console.log('GET: called with query param - ' + event.queryStringParameters.jid);
+  var id = (event.queryStringParameters && event.queryStringParameters.jid) ? event.queryStringParameters.jid : null;
+  console.log('GET: called with query param - ' + id);
 	
-  Jobs.get(event.queryStringParameters.jid).then(function(job) {
-      console.log('Jobs: successful get called for job - ' + event.queryStringParameters.jid);
+  Jobs.get(id).then(function(result) {
+      console.log('Jobs: successful get called for job - ' + id);
 	  response.body = JSON.stringify({
-		  message: job,
+		  message: result.count + ' jobs found',
 		  input: event,
-		  job: job
+		  jobs: result.jobs
 	  });
       callback(null, response);
   }).catch(function(err) {
-      console.log('Jobs: error during get call for job - ' + event.queryStringParameters.jid);
+      console.log('Jobs: error during get call for job - ' + id);
       console.error(err);
       callback(err);
   }).finally(function() {
