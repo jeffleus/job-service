@@ -3,7 +3,12 @@
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize('CallsheetSQL', 'mysqlAdmin', 'Eraser$17', {
 	host: 'mysql-freetier.cvwkw5fvgag8.us-west-2.rds.amazonaws.com',
-	port: 3306
+	port: 3306,
+    pool: {
+        max: 10,
+        min: 1,
+        idle: 100
+    }
 });
 
 var Job = sequelize.define('job', {
@@ -14,6 +19,7 @@ var Job = sequelize.define('job', {
 });
 
 module.exports.get = function(id) {
+    console.log('JOBS: get command called for jid - ' + id);
 	return sequelize.sync().then(function() {
 		console.info('JOB: get single job');
 		return Job.findById(id).then(function(job) {

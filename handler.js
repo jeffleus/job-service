@@ -30,6 +30,7 @@ module.exports.goodbye = (event, context, callback) => {
 };
 
 module.exports.get = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   const response = {
     statusCode: 200,
     body: JSON.stringify({
@@ -37,6 +38,7 @@ module.exports.get = (event, context, callback) => {
       input: event,
     }),
   };
+  console.log('GET: called with query param - ' + event.queryStringParameters.jid);
 	
   Jobs.get(event.queryStringParameters.jid).then(function(job) {
       console.log('Jobs: successful get called for job - ' + event.queryStringParameters.jid);
@@ -51,7 +53,7 @@ module.exports.get = (event, context, callback) => {
       console.error(err);
       callback(err);
   }).finally(function() {
-      Jobs.close();
+      //Jobs.close();
   });
 };
 
